@@ -5,7 +5,6 @@ import os
 import numpy as np
 import torch
 from pytorchvideo.transforms import ShortSideScale, Div255, UniformTemporalSubsample
-from tensorflow.python.keras.layers import Permute
 from torch.utils.data import Dataset, DataLoader
 from torchvision.datasets.samplers import UniformClipSampler
 from torchvision.transforms import Compose

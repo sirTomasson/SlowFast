@@ -3,12 +3,13 @@
 
 """Wrapper to train and test a video classification model."""
 from slowfast.config.defaults import assert_and_infer_cfg
+from slowfast.datasets import loader
 from slowfast.utils.misc import launch_job
 from slowfast.utils.parser import load_config, parse_args
-from vision.fair.slowfast.tools.demo_net import demo
-from vision.fair.slowfast.tools.test_net import test
-from vision.fair.slowfast.tools.train_net import train
-from vision.fair.slowfast.tools.visualization import visualize
+from demo_net import demo
+from test_net import test
+from train_net import train
+from visualization import visualize
 
 
 def main():
@@ -17,12 +18,20 @@ def main():
     """
     args = parse_args()
     print("config files: {}".format(args.cfg_files))
+    print(args)
     for path_to_config in args.cfg_files:
         cfg = load_config(args, path_to_config)
         cfg = assert_and_infer_cfg(cfg)
 
         # Perform training.
         if cfg.TRAIN.ENABLE:
+            print('hola')
+            train_loader = loader.construct_loader(cfg, "train")
+            if len(next(iter(train_loader))) > 0:
+                print('train_loader working')
+            else:
+                print('train_loader broken')
+
             launch_job(cfg=cfg, init_method=args.init_method, func=train)
 
         # Perform multi-clip testing.
